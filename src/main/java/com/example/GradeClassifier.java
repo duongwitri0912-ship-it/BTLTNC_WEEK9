@@ -21,7 +21,7 @@ public class GradeClassifier {
         if (gpa < 5.0) {
             // Ghi log mức độ DEBUG để theo dõi luồng logic bên trong
             logger.debug("GPA {} < 5.0, phân loại: Yếu", gpa);
-            return "Yếu"; //
+            return "Kém"; //
         }
 
         if (gpa < 6.5) {
