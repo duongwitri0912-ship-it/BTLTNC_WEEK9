@@ -57,17 +57,11 @@ public class GradeClassifierTest {
 
     @Test
     void testPathSeparatorConflict() {
-        // 1. Sử dụng thư viện chuẩn của Java để lấy đường dẫn theo kiểu "hợp lệ" của HĐH hiện tại
-        // Kết quả mong đợi:
-        // - Trên Windows: "data\test.txt"
-        // - Trên Linux/macOS: "data/test.txt"
         String actualPath = java.nio.file.Paths.get("data", "test.txt").toString();
 
-        // 2. CỐ TÌNH so sánh với một chuỗi "fix cứng" dấu gạch chéo của Windows (\)
-        String hardcodedWindowsPath = "data\\test.txt";
+        String crossPlatformPath = "data" + java.io.File.separator + "test.txt";
 
-        // 3. Thực hiện kiểm tra
-        org.junit.jupiter.api.Assertions.assertEquals(hardcodedWindowsPath, actualPath,
-                "Thất bại: Đường dẫn không tương thích với hệ điều hành này!");
+        org.junit.jupiter.api.Assertions.assertEquals(crossPlatformPath, actualPath,
+                "Thành công: Đường dẫn đã tương thích với mọi hệ điều hành!");
     }
 }
