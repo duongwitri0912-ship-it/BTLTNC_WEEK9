@@ -10,15 +10,11 @@ jobs:
   build-and-test:
     name: Build on ${{ matrix.os }}
 
-    # === 1. ÁP DỤNG MATRIX STRATEGY TẠI ĐÂY ===
     strategy:
-      # fail-fast: false giúp pipeline không bị hủy toàn bộ nếu chỉ có 1 HĐH bị lỗi.
-      # (Rất quan trọng cho yêu cầu tiếp theo của Bài 4)
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
 
-    # === 2. GÁN HỆ ĐIỀU HÀNH DỰA VÀO BIẾN MATRIX ===
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -30,16 +26,21 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-          cache: maven # Tăng tốc độ tải thư viện Maven cho các lần chạy sau
+          cache: maven
 
-      - name: Chạy Unit Tests và Đóng gói (Package)
-        run: mvn -B clean package --file pom.xml
+      - name: Chạy Unit Tests và Kiểm tra Độ bao phủ (Verify)
+        run: mvn -B clean verify --file pom.xml
 
       - name: Tải lên tệp .jar (Artifact)
         if: success()
         uses: actions/upload-artifact@v4
         with:
-          # === 3. THÊM BIẾN MATRIX VÀO TÊN ARTIFACT ===
-          # Giúp phân biệt rõ ràng tệp .jar sinh ra từ Windows, Ubuntu hay MacOS
           name: GradeClassifier-Build-Artifact-${{ matrix.os }}
           path: target/*.jar
+
+      - name: Tải lên Báo cáo JaCoCo (Coverage Report)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-coverage-report-${{ matrix.os }}
+          path: target/site/jacoco/
