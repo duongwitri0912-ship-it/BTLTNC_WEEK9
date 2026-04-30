@@ -26,7 +26,6 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-          cache: maven
 
       - name: Chạy Unit Tests và Kiểm tra Độ bao phủ (Verify)
         run: mvn -B clean verify --file pom.xml
