@@ -28,6 +28,17 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
 
+      - name: Quét lỗi định dạng Code (Checkstyle)
+        run: mvn checkstyle:checkstyle
+        continue-on-error: true
+
+      - name: Bot Comment Lỗi Code (Inline Feedback)
+        if: github.event_name == 'pull_request' && matrix.os == 'ubuntu-latest'
+        uses: dbelyaev/action-checkstyle@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-review
+
       - name: Chạy Unit Tests và Kiểm tra Độ bao phủ (Verify)
         run: mvn -B clean verify --file pom.xml
 
@@ -44,4 +55,3 @@ jobs:
         with:
           name: jacoco-coverage-report-${{ matrix.os }}
           path: target/site/jacoco/
-          # Test toc do cache lan 3
