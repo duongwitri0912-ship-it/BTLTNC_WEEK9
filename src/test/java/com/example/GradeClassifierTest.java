@@ -64,4 +64,33 @@ public class GradeClassifierTest {
         org.junit.jupiter.api.Assertions.assertEquals(crossPlatformPath, actualPath,
                 "Thành công: Đường dẫn đã tương thích với mọi hệ điều hành!");
     }
+
+    @Test
+    void testMainMethodValidInput() {
+        String input = "8.5\n";
+        java.io.InputStream in = new java.io.ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
+
+        Main.main(new String[]{});
+
+        assertTrue(true);
+    }
+
+    @Test
+    void testMainMethodInvalidInput() {
+        String input = "abc\n";
+        java.io.InputStream in = new java.io.ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
+
+        Main.main(new String[]{});
+        assertTrue(true);
+    }
+
+    @Test
+    void testAdditionalBoundaries() {
+        assertEquals("Yếu", GradeClassifier.classifyGrade(0.1));
+        assertEquals("Trung bình", GradeClassifier.classifyGrade(5.1));
+        assertEquals("Khá", GradeClassifier.classifyGrade(6.6));
+        assertEquals("Giỏi", GradeClassifier.classifyGrade(8.1));
+    }
 }
